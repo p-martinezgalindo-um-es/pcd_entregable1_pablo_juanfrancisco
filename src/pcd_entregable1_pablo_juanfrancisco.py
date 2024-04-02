@@ -1,20 +1,25 @@
-class Sexo:
-    V = 1
-    M = 2
-
-class Departamento:
-    DIIC = 1
-    DITEC = 2
-    DIS = 3
-
-class Asignaturas:
-    MATEMATICAS = 1
-    LENGUA = 2
-    BIOLOGIA = 3
-    HISTORIA = 4
-    INGLES = 5
-
 from abc import ABCMeta, abstractmethod
+from enum import Enum
+
+class Sexo(Enum):
+    V = 0
+    M = 1
+
+class Departamento(Enum):
+    DIIC = 0
+    DITEC = 1
+    DIS = 2
+
+class Asignaturas(Enum):
+    ESTADISTICA = 0
+    PROGRAMACION = 1
+    OPTIMIZACION = 2
+    ALGEBRA = 3
+    CALCULO = 4
+
+class tipoProfesor(Enum):
+    ASOCIADO = 0
+    TITULAR = 1
 
 class Persona(metaclass=ABCMeta):
     def __init__(self, nombre, dni, direccion, sexo):
@@ -24,119 +29,228 @@ class Persona(metaclass=ABCMeta):
         self.sexo = sexo
 
     @abstractmethod
-    def mostraDatos(self):
+    def mostrarDatos(self):
         pass
 
-class Miembro_departamento(Persona):
-    def __init__(self, nombre, dni, direccion, sexo, departamento):
+class MiembroDepartamento(Persona):
+    def __init__(self, nombre, dni, direccion, sexo, departamento=None):
         super().__init__(nombre, dni, direccion, sexo)
         self.departamento = departamento
 
-    def mostraDatos(self):
-        datos_persona = super().mostraDatos()
-        return f"{datos_persona}, Departamento: {self.departamento}"
+    def mostrarDatos(self):  # SE PUEDE QUITAR
+        print('---- DATOS MIEMBRO DEPARTAMENTO ----')
+        print(f'Nombre: {self.nombre} \nDNI: {self.dni} \nDireccion: {self.direccion} \nSexo: {self.sexo} \nDepartamento: {self.departamento}\n')
     
-    def cambiarDepartamento(self, nuevo_departamento):
-        self.departamento = nuevo_departamento
-    
-    
+    def asignarDepartamento(self, departamento):
+        if self.departamento is None:
+            self.departamento = departamento
+        else: print('Ya tiene departamento asignado\n')
+
+    def quitarDepartamento(self):
+        self.departamento = None
+
+    def cambiarDepartamento(self, departamento):
+        self.departamento = departamento
+
 class Estudiante(Persona):
     def __init__(self, nombre, dni, direccion, sexo):
         super().__init__(nombre, dni, direccion, sexo)
         self.asignaturas = []
 
     def mostrarDatos(self):
-        datos_persona = super().mostrarDatos()
-        asignaturas_str = ", ".join(str(a) for a in self.asignaturas)
-        return f"{datos_persona}, Asignaturas: {asignaturas_str}"
+        print('---- DATOS ESTUDIANTE ----\n')
+        print(f'Nombre: {self.nombre} \nDNI: {self.dni} \nDireccion: {self.direccion} \nSexo: {self.sexo} \nAsignaturas: {self.asignaturas}\n')
 
-    def mostrarAsignaturas(self, asignaturas):
-        for i in asignaturas:
-            print(i)
 
+    def mostrarAsignaturas(self):
+        print('---- ASIGNATURAS ----\n')
+        for asignatura in self.asignaturas:
+            print(asignatura)
+        print()
+
+    
     def añadirAsignatura(self, asignatura):
-        self.asignaturas.append(asignatura)
+        if asignatura not in self.asignaturas:
+            self.asignaturas.append(asignatura)
+        else: print('Ya está añadida')
 
     def quitarAsignatura(self, asignatura):
-        for i in range(len(self.asignaturas)-1):
+        for i in range(len(self.asignaturas)):
             if self.asignaturas[i] == asignatura:
-                self.asignaturas.remove(i)
+                self.asignaturas.remove(self.asignaturas[i])
+                return
 
-        
-class Investigador(Miembro_departamento):
-    def __init__(self, nombre, dni, direccion, sexo, departamento, area_investigacion):
+class Investigador(MiembroDepartamento):
+    def __init__(self, nombre, dni, direccion, sexo, departamento, areaInvestigacion):
         super().__init__(nombre, dni, direccion, sexo, departamento)
-        self.area_investigacion = area_investigacion #OCULTO???
-        
-    def mostraDatos(self):
-        datos_persona = super().mostraDatos()
-        return f"{datos_persona}, Area: {self.area_investigacion}"
-    
-class Profesor(Miembro_departamento):
-    def __init__(self, nombre, dni, direccion, sexo, departamento, area_investigacion=None):
+        self.areaInvestigacion = areaInvestigacion
+
+    def mostrarDatos(self):
+        print('---- DATOS INVESTIGADOR ----\n')
+        print(f'Nombre: {self.nombre} \nDNI: {self.dni} \nDireccion: {self.direccion} \nSexo: {self.sexo} \nDepartamento: {self.departamento} \nArea: {self.areaInvestigacion}\n')
+
+class Profesor(MiembroDepartamento):
+    def __init__(self, nombre, dni, direccion, sexo, departamento, tipo, areaInvestigacion=None):
         super().__init__(nombre, dni, direccion, sexo, departamento)
         self.asignaturas = []
-        self.area_investigacion = area_investigacion
+        self.tipo = tipo
+        self.areaInvestigacion = areaInvestigacion
 
-    def mostraDatos(self):
-        if self.area_investigacion is not None:
-            datos_persona = super().mostraDatos()
-            return f"{datos_persona}, Area: {self.area_investigacion}, Tipo de profesor: Titular"
-        else:
-            datos_persona = super().mostraDatos()
-            return f"{datos_persona}, Tipo de profesor: Asociado"
+    def mostrarDatos(self):
+        print('---- DATOS PROFESOR ----\n')
+        print(f'Nombre: {self.nombre} \nDNI: {self.dni} \nDireccion: {self.direccion} \nSexo: {self.sexo} \nDepartamento: {self.departamento} \nArea: {self.areaInvestigacion} \nTipo de profesor: {self.tipo}\n')        
 
     def añadirAsignatura(self, asignatura):
-        self.asignaturas.append(asignatura)
+        if asignatura not in self.asignaturas:
+            self.asignaturas.append(asignatura)
+        else: print('Ya está añadida')
 
     def quitarAsignatura(self, asignatura):
-        for i in range(len(self.asignaturas)-1):
-            if self.asignaturas[i] == asignatura:
-                self.asignaturas.remove(i)
- 
-    
+        if asignatura in self.asignaturas:
+            for i in range(len(self.asignaturas)):
+                if self.asignaturas[i] == asignatura:
+                    self.asignaturas.remove(self.asignaturas[i])
+                    return
+
+    def mostrarAsignaturas(self):
+        print('---- ASIGNATURAS ----\n')
+        for asignatura in self.asignaturas:
+            print(asignatura)
+        print()
 
 class Universidad:
-    def __init__(self, nombre, estudiantes, profesores, investigadores):
+    def __init__(self, nombre):
         self._nombre = nombre
-        self._estudiantes = estudiantes
-        self._profesores = profesores
-        self.investigadores = investigadores
+        self._estudiantes = []
+        self._profesores = []
+        self._investigadores = []
 
-    def añadirEstudiante(self, estudiante): #comprobar q no existe el mismo estudiante
-        self._estudiantes.append(estudiante)
+    def añadirEstudiante(self, estudiante):
+        if estudiante not in self._estudiantes:
+            self._estudiantes.append(estudiante)
+        else: print('Ya existe este estudiante')
 
     def añadirProfesor(self, profesor):
-        self._estudiantes.append(profesor)
+        if profesor not in self._profesores:
+            self._profesores.append(profesor)
+        else: print('Ya existe este profesor')
 
     def añadirInvestigador(self, investigador):
-        self._estudiantes.append(investigador)
+        if investigador not in self._investigadores:
+            self._investigadores.append(investigador)
+        else: print('Ya existe este investigador')
 
-    def añadirMiembroDepartamento(self, persona, departamento):
-        Miembro_departamento(persona.nombre, persona.dni,persona.direccion, persona.sexo, departamento)
-        
     def quitarEstudiante(self, estudiante):
-        for i in range(len(self._estudiantes)-1):
+        for i in range(len(self._estudiantes)):
             if self._estudiantes[i] == estudiante:
-                self._estudiantes.remove(i)
+                self._estudiantes.remove(self._estudiantes[i])
+                return
 
     def quitarProfesor(self, profesor):
-        for i in range(len(self._estudiantes)-1):
+        for i in range(len(self._profesores)):
             if self._profesores[i] == profesor:
-                self._profesores.remove(i)
+                self._profesores.remove(self._profesores[i])
+                return
 
-    def quitarProfesor(self, profesor):
-        for i in range(len(self._estudiantes)-1):
-            if self._profesores[i] == profesor:
-                self._profesores.remove(i)
+    def quitarInvestigador(self, investigador):
+        for i in range(len(self._investigadores)):
+            if self._investigadores[i] == investigador:
+                self._investigadores.remove(self._investigadores[i])
+                return
 
-    def quitarMiembroDepartamento(self, miembro):
-        for i in range(len(self._estudiantes)-1):
-            if self._profesores[i] == profesor:
-                self._profesores.remove(i)
-        
+    def listarEstudiantes(self):
+        print('---- LISTADO DE ESTUDIANTES ----\n')
+        for estudiante in self._estudiantes:
+            print(estudiante.mostrarDatos(), '\n')
+
+    def listarProfesores(self):
+        print('---- LISTADO DE PROFESORES ----\n')
+        for profesor in self._profesores:
+            print(profesor.mostrarDatos(), '\n')
+    
+    def listarInvestigadores(self):
+        print('---- LISTADO DE INVESTGADORES ----\n')
+        for investigador in self._investigadores:
+            print(investigador.mostrarDatos(), '\n')
     
 
-#EJEMPLO DE EJECUCIÓN
+# EJEMPLO DE USO
+                
+universidad = Universidad('Universidad de Murcia')
+
+estudiante1 = Estudiante("Pablo", "23347636T", "Calle Rambla", Sexo.V)
+estudiante2 = Estudiante("Juan Francisco", "23306585F", "Calle Gran Via", Sexo.V)
+estudiante3 = Estudiante("Carmen", "23528569D", "Calle la Merced", Sexo.M)
+
+universidad.añadirEstudiante(estudiante1)
+universidad.añadirEstudiante(estudiante2)
+universidad.añadirEstudiante(estudiante3)
+
+profesor1 = Profesor("Humberto", "45869571G", "Calle Fuente Álamo", Sexo.V, Departamento.DIIC, tipoProfesor.TITULAR, 'Programación orientada a objetos')
+profesor2 = Profesor("Félix", "45896235H", "Calle Traperia", Sexo.V, Departamento.DIS, tipoProfesor.ASOCIADO)
+profesor3 = Profesor("Concepción", "26895741Y", "Calle Plateria", Sexo.M, Departamento.DITEC, tipoProfesor.TITULAR, 'Optimización')
+
+universidad.añadirProfesor(profesor1)
+universidad.añadirProfesor(profesor2)
+universidad.añadirProfesor(profesor3)
+
+investigador1 = Investigador("Claudi", "486957P", "Calle JC1", Sexo.V, Departamento.DIIC, 'Álgebra')
+investigador2 = Investigador("María", "48575214K", "Calle Murcia", Sexo.M, Departamento.DITEC, 'Algorítmia')
+investigador3 = Investigador("Carlos", "63325896G", "Calle Rectores", Sexo.V, Departamento.DIS, 'Cálculo')
+
+universidad.añadirInvestigador(investigador1)
+universidad.añadirInvestigador(investigador2)
+universidad.añadirInvestigador(investigador3)
+
+# universidad.listarEstudiantes()
+# universidad.listarProfesores()
+# universidad.listarInvestigadores()
+
+estudiante1.añadirAsignatura(Asignaturas.ALGEBRA)
+estudiante1.añadirAsignatura(Asignaturas.ESTADISTICA)
+estudiante1.añadirAsignatura(Asignaturas.OPTIMIZACION)
+estudiante1.añadirAsignatura(Asignaturas.PROGRAMACION)
+# estudiante1.añadirAsignatura(Asignaturas.PROGRAMACION)
+estudiante1.añadirAsignatura(Asignaturas.CALCULO)
+estudiante1.quitarAsignatura(Asignaturas.OPTIMIZACION)
+
+# estudiante1.mostrarAsignaturas()
+
+estudiante2.añadirAsignatura(Asignaturas.ALGEBRA)
+estudiante2.añadirAsignatura(Asignaturas.ESTADISTICA)
+estudiante2.añadirAsignatura(Asignaturas.OPTIMIZACION)
+estudiante2.añadirAsignatura(Asignaturas.PROGRAMACION)
+estudiante2.añadirAsignatura(Asignaturas.CALCULO)
+
+estudiante3.añadirAsignatura(Asignaturas.ALGEBRA)
+estudiante3.añadirAsignatura(Asignaturas.ESTADISTICA)
+estudiante3.añadirAsignatura(Asignaturas.OPTIMIZACION)
+estudiante3.añadirAsignatura(Asignaturas.PROGRAMACION)
+estudiante3.añadirAsignatura(Asignaturas.CALCULO)
+
+# investigador1.mostrarDatos()
+
+profesor1.añadirAsignatura(Asignaturas.PROGRAMACION)
+profesor1.añadirAsignatura(Asignaturas.CALCULO)
+profesor1.quitarAsignatura(Asignaturas.CALCULO)
+
+profesor2.añadirAsignatura(Asignaturas.ESTADISTICA)
+profesor2.añadirAsignatura(Asignaturas.ALGEBRA)
+
+profesor3.añadirAsignatura(Asignaturas.OPTIMIZACION)
+profesor3.añadirAsignatura(Asignaturas.CALCULO)
 
 
+# profesor1.asignarDepartamento(Departamento.DIS)
+# profesor1.cambiarDepartamento(Departamento.DITEC)
+# profesor1.mostrarDatos()
+# profesor1.mostrarAsignaturas()
+
+
+universidad.quitarEstudiante(estudiante3)
+universidad.quitarProfesor(profesor3)
+universidad.quitarInvestigador(investigador3)
+
+# universidad.listarEstudiantes()
+# universidad.listarProfesores()
+# universidad.listarInvestigadores()
