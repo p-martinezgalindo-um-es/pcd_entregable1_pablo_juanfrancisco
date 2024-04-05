@@ -28,34 +28,52 @@ class Persona(metaclass=ABCMeta):
         self.direccion = direccion
         self.sexo = sexo
 
+    
     @abstractmethod
     def mostrarDatos(self):
-        pass
+            pass
 
 class MiembroDepartamento(Persona):
     def __init__(self, nombre, dni, direccion, sexo, departamento=None):
         super().__init__(nombre, dni, direccion, sexo)
         self.departamento = departamento
 
-    def mostrarDatos(self):  # SE PUEDE QUITAR
+    def mostrarDatos(self):  
         print('---- DATOS MIEMBRO DEPARTAMENTO ----')
         print(f'Nombre: {self.nombre} \nDNI: {self.dni} \nDireccion: {self.direccion} \nSexo: {self.sexo} \nDepartamento: {self.departamento}\n')
     
     def asignarDepartamento(self, departamento):
-        if self.departamento is None:
-            self.departamento = departamento
-        else: print('Ya tiene departamento asignado\n')
+        try:
+            if self.departamento is None:
+                self.departamento = departamento
+            else:
+                raise ValueError(f'{self.nombre} ya tiene departamento asignado')
+        except ValueError as e:
+            print(e)
+
 
     def quitarDepartamento(self):
-        self.departamento = None
+        try:
+            if self.departamento is not None:
+                self.departamento = None
+            else:
+                raise ValueError(f'{self.nombre} no tiene ningún departamento asignado') 
+        except ValueError as e:
+            print(e)
 
     def cambiarDepartamento(self, departamento):
-        self.departamento = departamento
+        try:
+            if self.departamento is not None:
+                self.departamento = departamento
+            else:
+                raise ValueError(f'{self.nombre} no tiene ningún departamento asignado') 
+        except ValueError as e:
+            print(e)
 
 class Estudiante(Persona):
     def __init__(self, nombre, dni, direccion, sexo):
         super().__init__(nombre, dni, direccion, sexo)
-        self.asignaturas = []
+        self._asignaturas = []
 
     def mostrarDatos(self):
         print('---- DATOS ESTUDIANTE ----\n')
@@ -64,21 +82,28 @@ class Estudiante(Persona):
 
     def mostrarAsignaturas(self):
         print('---- ASIGNATURAS ----\n')
-        for asignatura in self.asignaturas:
+        for asignatura in self._asignaturas:
             print(asignatura)
         print()
 
     
     def añadirAsignatura(self, asignatura):
-        if asignatura not in self.asignaturas:
-            self.asignaturas.append(asignatura)
-        else: print('Ya está añadida')
+        try:
+            if asignatura not in self._asignaturas:
+                self._asignaturas.append(asignatura)
+            else: 
+                raise ValueError(f'ERROR. {asignatura} ya ha sido añadida anteriormente')
+        except ValueError as e:
+            print(e)
 
     def quitarAsignatura(self, asignatura):
-        for i in range(len(self.asignaturas)):
-            if self.asignaturas[i] == asignatura:
-                self.asignaturas.remove(self.asignaturas[i])
-                return
+        try:
+            if asignatura in self._asignaturas:
+                self._asignaturas.remove(asignatura)
+            else: 
+                raise ValueError(f'ERROR. La asignatura propuesta para ser eliminada no se encuentra entre las disponibles del estudiante')
+        except ValueError as e:
+            print(e)
 
 class Investigador(MiembroDepartamento):
     def __init__(self, nombre, dni, direccion, sexo, departamento, areaInvestigacion):
@@ -90,73 +115,123 @@ class Investigador(MiembroDepartamento):
         print(f'Nombre: {self.nombre} \nDNI: {self.dni} \nDireccion: {self.direccion} \nSexo: {self.sexo} \nDepartamento: {self.departamento} \nArea: {self.areaInvestigacion}\n')
 
 class Profesor(MiembroDepartamento):
-    def __init__(self, nombre, dni, direccion, sexo, departamento, tipo, areaInvestigacion=None):
+    def __init__(self, nombre, dni, direccion, sexo, departamento, tipo):
         super().__init__(nombre, dni, direccion, sexo, departamento)
-        self.asignaturas = []
+        self._asignaturas = []
         self.tipo = tipo
-        self.areaInvestigacion = areaInvestigacion
+        self._areaInvestigacion = None
 
     def mostrarDatos(self):
         print('---- DATOS PROFESOR ----\n')
-        print(f'Nombre: {self.nombre} \nDNI: {self.dni} \nDireccion: {self.direccion} \nSexo: {self.sexo} \nDepartamento: {self.departamento} \nArea: {self.areaInvestigacion} \nTipo de profesor: {self.tipo}\n')        
+        print(f'Nombre: {self.nombre} \nDNI: {self.dni} \nDireccion: {self.direccion} \nSexo: {self.sexo} \nDepartamento: {self.departamento} \nArea: {self._areaInvestigacion} \nTipo de profesor: {self.tipo}\n')        
 
     def añadirAsignatura(self, asignatura):
-        if asignatura not in self.asignaturas:
-            self.asignaturas.append(asignatura)
-        else: print('Ya está añadida')
+        try:
+            if asignatura not in self._asignaturas:
+                self._asignaturas.append(asignatura)
+            else: 
+                raise ValueError(f'ERROR. {asignatura} ya ha sido añadida anteriormente')
+        except ValueError as e:
+            print(e)
+
+    def cambiarTipo(self):
+        if self.tipo is tipoProfesor.TITULAR:
+                self._areaInvestigacion = None
+                self.tipo = tipoProfesor.ASOCIADO
+        else: self.tipo = tipoProfesor.TITULAR
+        
+    def añadirArea(self, area):
+        try:
+            if self.tipo is tipoProfesor.TITULAR:
+                self._areaInvestigacion = area
+            else: 
+                raise ValueError(f'ERROR. El profesor al que se le está intentando añadir un área de investigación es de tipo ASOCIADO.')
+        except ValueError as e:
+            print(e)
 
     def quitarAsignatura(self, asignatura):
-        if asignatura in self.asignaturas:
-            for i in range(len(self.asignaturas)):
-                if self.asignaturas[i] == asignatura:
-                    self.asignaturas.remove(self.asignaturas[i])
-                    return
+        try:
+            if asignatura in self._asignaturas:
+                self._asignaturas.remove(asignatura)
+            else: 
+                raise ValueError(f'ERROR. La asignatura propuesta para ser eliminada no se encuentra entre las disponibles del estudiante')
+        except ValueError as e:
+            print(e)
 
     def mostrarAsignaturas(self):
         print('---- ASIGNATURAS ----\n')
-        for asignatura in self.asignaturas:
+        for asignatura in self._asignaturas:
             print(asignatura)
         print()
 
 class Universidad:
     def __init__(self, nombre):
-        self._nombre = nombre
+        self.nombre = nombre
         self._estudiantes = []
         self._profesores = []
         self._investigadores = []
 
     def añadirEstudiante(self, estudiante):
-        if estudiante not in self._estudiantes:
-            self._estudiantes.append(estudiante)
-        else: print('Ya existe este estudiante')
+        
+        try:
+            if estudiante not in self._estudiantes:
+                self._estudiantes.append(estudiante)
+            
+            else: 
+                raise ValueError(f'ERROR. Estudiante ya añadido')
+        
+        except ValueError as e:
+            print(e)
 
     def añadirProfesor(self, profesor):
-        if profesor not in self._profesores:
-            self._profesores.append(profesor)
-        else: print('Ya existe este profesor')
+        try:
+            if profesor not in self._profesores:
+                self._profesores.append(profesor)
+            else: 
+                raise ValueError(f'ERROR. Profesor ya añadido')
+        except ValueError as e:
+            print(e)
 
     def añadirInvestigador(self, investigador):
-        if investigador not in self._investigadores:
-            self._investigadores.append(investigador)
-        else: print('Ya existe este investigador')
+        try:
+            if investigador not in self._investigadores:
+                self._investigadores.append(investigador)
+            else: 
+                raise ValueError(f'ERROR. Ivestigador ya añadido')
+            
+        except ValueError as e:
+            print(e)
 
     def quitarEstudiante(self, estudiante):
-        for i in range(len(self._estudiantes)):
-            if self._estudiantes[i] == estudiante:
-                self._estudiantes.remove(self._estudiantes[i])
-                return
+        try:
+            if estudiante in self._estudiantes:
+                self._estudiantes.remove(estudiante)
+            else:
+                raise ValueError(f'ERROR. Estudiante no añadido')
+            
+        except ValueError as e:
+            print(e)
+        
 
     def quitarProfesor(self, profesor):
-        for i in range(len(self._profesores)):
-            if self._profesores[i] == profesor:
-                self._profesores.remove(self._profesores[i])
-                return
+        try:
+            if profesor in self._profesores:
+                self._profesores.remove(profesor)
+            else:
+                raise ValueError(f'ERROR. Profesor no añadido')
+            
+        except ValueError as e:
+            print(e)
 
     def quitarInvestigador(self, investigador):
-        for i in range(len(self._investigadores)):
-            if self._investigadores[i] == investigador:
-                self._investigadores.remove(self._investigadores[i])
-                return
+        try:
+            if investigador in self._investigadores:
+                self._investigadores.remove(investigador)
+            else:
+                raise ValueError(f'ERROR. Investigadores no añadido')
+            
+        except ValueError as e:
+            print(e)
 
     def listarEstudiantes(self):
         print('---- LISTADO DE ESTUDIANTES ----\n')
@@ -175,7 +250,7 @@ class Universidad:
     
 
 # EJEMPLO DE USO
-                
+            
 universidad = Universidad('Universidad de Murcia')
 
 estudiante1 = Estudiante("Pablo", "23347636T", "Calle Rambla", Sexo.V)
@@ -186,9 +261,14 @@ universidad.añadirEstudiante(estudiante1)
 universidad.añadirEstudiante(estudiante2)
 universidad.añadirEstudiante(estudiante3)
 
-profesor1 = Profesor("Humberto", "45869571G", "Calle Fuente Álamo", Sexo.V, Departamento.DIIC, tipoProfesor.TITULAR, 'Programación orientada a objetos')
+profesor1 = Profesor("Humberto", "45869571G", "Calle Fuente Álamo", Sexo.V, Departamento.DIIC, tipoProfesor.TITULAR)
 profesor2 = Profesor("Félix", "45896235H", "Calle Traperia", Sexo.V, Departamento.DIS, tipoProfesor.ASOCIADO)
-profesor3 = Profesor("Concepción", "26895741Y", "Calle Plateria", Sexo.M, Departamento.DITEC, tipoProfesor.TITULAR, 'Optimización')
+profesor3 = Profesor("Concepción", "26895741Y", "Calle Plateria", Sexo.M, Departamento.DITEC, tipoProfesor.TITULAR)
+
+profesor1.añadirArea('Programación orientada a objetos')
+profesor3.añadirArea('Optimización')
+profesor2.cambiarTipo()
+
 
 universidad.añadirProfesor(profesor1)
 universidad.añadirProfesor(profesor2)
@@ -254,3 +334,5 @@ universidad.quitarInvestigador(investigador3)
 # universidad.listarEstudiantes()
 # universidad.listarProfesores()
 # universidad.listarInvestigadores()
+
+profesor1.mostrarDatos()
