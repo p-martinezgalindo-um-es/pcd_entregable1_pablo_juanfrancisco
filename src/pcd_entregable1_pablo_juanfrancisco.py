@@ -1,4 +1,4 @@
-class Sexo:
+class Sexo:  
     V = 1
     M = 2
 
