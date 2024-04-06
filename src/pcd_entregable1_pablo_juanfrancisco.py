@@ -1,27 +1,27 @@
 from abc import ABCMeta, abstractmethod
 from enum import Enum
 
-class Sexo(Enum):
+class Sexo(Enum): # Se relaciona con persona mediante una composición ya que no existe una sin la otra.
     V = 0
     M = 1
 
-class Departamento(Enum):
+class Departamento(Enum): # Se trata de una agragación porque puede existir un departamento sin miembro.
     DIIC = 0
     DITEC = 1
     DIS = 2
 
-class Asignaturas(Enum):
+class Asignaturas(Enum): # Es una agregación porque puede existir un profesor y estudiante que no tengan asignada ninguna asignatura y viceversa
     ESTADISTICA = 0
     PROGRAMACION = 1
     OPTIMIZACION = 2
     ALGEBRA = 3
     CALCULO = 4
 
-class tipoProfesor(Enum):
+class tipoProfesor(Enum): # Ocurre lo mismo que en la enumeración Sexo ya que solo pueden existir esos dos tipos de profesores
     ASOCIADO = 0
     TITULAR = 1
 
-class Persona(metaclass=ABCMeta):
+class Persona(metaclass=ABCMeta): # Creamos clase persona con atributos nombre, dni, dirección y sexo.
     def __init__(self, nombre, dni, direccion, sexo):
         self.nombre = nombre
         self.dni = dni
@@ -30,10 +30,10 @@ class Persona(metaclass=ABCMeta):
 
     
     @abstractmethod
-    def mostrarDatos(self):
+    def mostrarDatos(self): # Establecemos la función mostrarDatos como obligatoria en las clases que heredan de persona
             pass
 
-class MiembroDepartamento(Persona):
+class MiembroDepartamento(Persona): # Creamos la clase MiembroDepartamento que hereda de persona para añadirle el atributo de departamento
     def __init__(self, nombre, dni, direccion, sexo, departamento=None):
         super().__init__(nombre, dni, direccion, sexo)
         self.departamento = departamento
@@ -50,7 +50,6 @@ class MiembroDepartamento(Persona):
                 raise ValueError(f'{self.nombre} ya tiene departamento asignado')
         except ValueError as e:
             print(e)
-
 
     def quitarDepartamento(self):
         try:
@@ -70,15 +69,14 @@ class MiembroDepartamento(Persona):
         except ValueError as e:
             print(e)
 
-class Estudiante(Persona):
+class Estudiante(Persona): # Creamos la clase Estudiante que también hereda de Persona y que tendrá otro atributo que será asignaturas 
     def __init__(self, nombre, dni, direccion, sexo):
         super().__init__(nombre, dni, direccion, sexo)
-        self._asignaturas = []
+        self._asignaturas = [] # Creamos el atributo asignaturas que será una lista de las asignaturas añadidas del estudiante.
 
     def mostrarDatos(self):
         print('---- DATOS ESTUDIANTE ----\n')
-        print(f'Nombre: {self.nombre} \nDNI: {self.dni} \nDireccion: {self.direccion} \nSexo: {self.sexo} \nAsignaturas: {self.asignaturas}\n')
-
+        print(f'Nombre: {self.nombre} \nDNI: {self.dni} \nDireccion: {self.direccion} \nSexo: {self.sexo}\n')
 
     def mostrarAsignaturas(self):
         print('---- ASIGNATURAS ----\n')
@@ -86,7 +84,6 @@ class Estudiante(Persona):
             print(asignatura)
         print()
 
-    
     def añadirAsignatura(self, asignatura):
         try:
             if asignatura not in self._asignaturas:
@@ -105,7 +102,7 @@ class Estudiante(Persona):
         except ValueError as e:
             print(e)
 
-class Investigador(MiembroDepartamento):
+class Investigador(MiembroDepartamento): # Creamos la clase Investigador que hereda de MiembroDepartamento y añadimos el atributo areaInvestigacion
     def __init__(self, nombre, dni, direccion, sexo, departamento, areaInvestigacion):
         super().__init__(nombre, dni, direccion, sexo, departamento)
         self.areaInvestigacion = areaInvestigacion
@@ -114,12 +111,12 @@ class Investigador(MiembroDepartamento):
         print('---- DATOS INVESTIGADOR ----\n')
         print(f'Nombre: {self.nombre} \nDNI: {self.dni} \nDireccion: {self.direccion} \nSexo: {self.sexo} \nDepartamento: {self.departamento} \nArea: {self.areaInvestigacion}\n')
 
-class Profesor(MiembroDepartamento):
+class Profesor(MiembroDepartamento): # Creamos la clase Profesor que hereda de MiembroDepartamento y añadimos los atributos asignaturas, tipo y areaInvestigacion
     def __init__(self, nombre, dni, direccion, sexo, departamento, tipo):
         super().__init__(nombre, dni, direccion, sexo, departamento)
-        self._asignaturas = []
-        self.tipo = tipo
-        self._areaInvestigacion = None
+        self._asignaturas = []  # Creamos el atributo asignaturas que será una lista de las asignaturas añadidas del profesor.
+        self.tipo = tipo 
+        self._areaInvestigacion = None # Creamos el atributo de areaInvestigacion para poder añadirle un area de investigación a los profesores titulares.
 
     def mostrarDatos(self):
         print('---- DATOS PROFESOR ----\n')
@@ -164,11 +161,11 @@ class Profesor(MiembroDepartamento):
             print(asignatura)
         print()
 
-class Universidad:
+class Universidad: # Creamos la clase Universidad para gestionar todos los estudiantes, profesores e investigadores registrados
     def __init__(self, nombre):
         self.nombre = nombre
-        self._estudiantes = []
-        self._profesores = []
+        self._estudiantes = [] # Establecemos como privados las listas de estudiantes, profesores e investigadores, lo cual concuerda con
+        self._profesores = []  # las cardinalidades del esquema UML, existiendo la posibilidad de haber una universidad sin estudiantes, profesores ni investigadores.
         self._investigadores = []
 
     def añadirEstudiante(self, estudiante):
