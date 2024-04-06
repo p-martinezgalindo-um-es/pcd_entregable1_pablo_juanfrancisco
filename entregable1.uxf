@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="15.1">
-  <zoom_level>6</zoom_level>
+  <zoom_level>8</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>366</x>
-      <y>354</y>
-      <w>132</w>
-      <h>84</h>
+      <x>216</x>
+      <y>160</y>
+      <w>176</w>
+      <h>112</h>
     </coordinates>
     <panel_attributes>&lt;&lt;abstract&gt;&gt;
 Persona
@@ -17,16 +17,16 @@ Persona
 + direccion: str
 + sexo: Sexo
 --
-mostraDatos</panel_attributes>
++ mostrarDatos()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>366</x>
-      <y>234</y>
-      <w>60</w>
-      <h>54</h>
+      <x>216</x>
+      <y>0</y>
+      <w>80</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>&lt;&lt;enum&gt;&gt;
 Sexo
@@ -38,165 +38,187 @@ M</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>384</x>
-      <y>282</y>
-      <w>18</w>
-      <h>84</h>
+      <x>240</x>
+      <y>64</y>
+      <w>48</w>
+      <h>112</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1= 1
+m2= 0..n</panel_attributes>
     <additional_attributes>10.0;120.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>840</x>
-      <y>714</y>
-      <w>120</w>
-      <h>90</h>
+      <x>848</x>
+      <y>640</y>
+      <w>160</w>
+      <h>120</h>
     </coordinates>
     <panel_attributes>&lt;&lt;enum&gt;&gt;
-Asignaturas
+Asignatura
 --
-MATEMATICAS
-LENGUA
-BIOLOGIA
-HISTORIA
-INGLES</panel_attributes>
+ESTADÍSTICA
+PROGRAMACIÓN
+OPTIMIZACIÓN
+ÁLGEBRA
+CÁLCULO</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>822</x>
-      <y>534</y>
-      <w>144</w>
-      <h>66</h>
+      <x>824</x>
+      <y>400</y>
+      <w>192</w>
+      <h>88</h>
     </coordinates>
     <panel_attributes>Estudiante
 --
-+ asignaturas: list Asignaturas
+- asignaturas: list Asignatura
 --
-mostrarAsignaturas</panel_attributes>
++ mostrarDatos(): str
++ mostrarAsignaturas(): str
++ añadirAsignatura(asignatura:Asignatura)
++ quitarAsignatura(asignatura:Asignatura)</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>888</x>
-      <y>594</y>
-      <w>18</w>
-      <h>132</h>
+      <x>912</x>
+      <y>480</y>
+      <w>48</w>
+      <h>176</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1= 0..n
+m2= 0..m</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;200.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>378</x>
-      <y>534</y>
-      <w>144</w>
-      <h>66</h>
+      <x>232</x>
+      <y>400</y>
+      <w>192</w>
+      <h>88</h>
     </coordinates>
     <panel_attributes>Investigador
 --
-+ area_investigacion: str</panel_attributes>
++ areaInvestigacion: str
+--
+mostrarDatos():str
+
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>444</x>
-      <y>432</y>
-      <w>462</w>
-      <h>114</h>
+      <x>320</x>
+      <y>264</y>
+      <w>616</w>
+      <h>152</h>
     </coordinates>
-    <panel_attributes>lt=&lt;-</panel_attributes>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;130.0;750.0;130.0;750.0;170.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>600</x>
-      <y>276</y>
-      <w>348</w>
-      <h>174</h>
+      <x>432</x>
+      <y>56</y>
+      <w>608</w>
+      <h>232</h>
     </coordinates>
     <panel_attributes>Universidad
 --
-- nombre: str
++ nombre: str
 - estudiantes: list Estudiante
 - profesores: list Profesor
 - investigadores: list Investigador
-
 --
-+ añadirEstudiante(nombre,dni,direccion,sexo,asignaturas)
-+ añadirProfesor(nombre,dni,direccion,sexo,asignaturas,departamento,area_investigacion)
-+ añadirInvestigador(nombre,dni,direccion,sexo)
-+ mostrarEstudiantes
-+ mostrarProfesores
-+ mostrarInvestigadores
-+</panel_attributes>
++ añadirEstudiante(nombre:str,dni:str,direccion:str,sexo:Sexo)
++ añadirProfesor(nombre:str,dni:str,direccion:str,sexo:Sexo,departamento:Departamento,tipo:TipoProfesor)
++ añadirInvestigador(nombre:str,dni:str,direccion:str,sexo:Sexo, departamento:Departamento, areaInvestigacion:str)
++ quitarEstudiantes(nombre:str,dni:str,direccion:str,sexo:Sexo)
++ quitarProfesores(nombre:str,dni:str,direccion:str,sexo:Sexo,departamento:Departamento,tipo:TipoProfesor)
++ quitarInvestigadores(nombre:str,dni:str,direccion:str,sexo:Sexo, departamento:Departamento, areaInvestigacion:str)
++ listarEstudiantes():str
++ listarProfesores():str
++ listarInvestigadores():str</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>930</x>
-      <y>444</y>
-      <w>18</w>
-      <h>102</h>
+      <x>968</x>
+      <y>280</y>
+      <w>48</w>
+      <h>136</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1= 0..n
+m2= 1..m</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;150.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>504</x>
-      <y>426</y>
-      <w>108</w>
-      <h>120</h>
+      <x>392</x>
+      <y>256</y>
+      <w>56</w>
+      <h>160</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>160.0;10.0;10.0;10.0;10.0;180.0</additional_attributes>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1= 0..n
+m2=1</panel_attributes>
+    <additional_attributes>50.0;10.0;20.0;10.0;20.0;180.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>570</x>
-      <y>534</y>
-      <w>204</w>
-      <h>78</h>
+      <x>488</x>
+      <y>376</y>
+      <w>272</w>
+      <h>144</h>
     </coordinates>
     <panel_attributes>Profesor
 --
-+ asignaturas: list Asignaturas
-+ area_investigacion: Titular(area_investigacion)
+- asignaturas: list Asignatura
+- areaInvestigacion: str
++ tipo: TipoProfesor
 --
-añadirInvestigador
-mostrarAsignaturas
-mostrarTipo</panel_attributes>
++ mostrarDatos(): str
++ añadirAsignatura(asignatura:Asignatura)
++ quitarAsignatura(asignatura:Asignatura)
++ cambiarTipo()
++ añadirArea(area:str)
++ mostrarAsignaturas():str</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>768</x>
-      <y>564</y>
-      <w>84</w>
-      <h>192</h>
+      <x>752</x>
+      <y>424</y>
+      <w>112</w>
+      <h>280</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;50.0;10.0;50.0;300.0;120.0;300.0</additional_attributes>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1= 0..n
+m2= 0..m</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;10.0;50.0;320.0;120.0;320.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>354</x>
-      <y>780</y>
-      <w>72</w>
-      <h>66</h>
+      <x>200</x>
+      <y>744</y>
+      <w>96</w>
+      <h>80</h>
     </coordinates>
     <panel_attributes>&lt;&lt;enum&gt;&gt;
 Departamento
@@ -209,98 +231,106 @@ DIS</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>696</x>
-      <y>444</y>
-      <w>18</w>
-      <h>102</h>
+      <x>256</x>
+      <y>672</y>
+      <w>48</w>
+      <h>88</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;150.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>396</x>
-      <y>726</y>
-      <w>18</w>
-      <h>66</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1= 1
+m2= 0..n</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>342</x>
-      <y>666</y>
-      <w>174</w>
-      <h>66</h>
+      <x>184</x>
+      <y>576</y>
+      <w>280</w>
+      <h>104</h>
     </coordinates>
     <panel_attributes>MiembroDepartamento
 --
-+ persona: Persona
 + departamento: Departamento
 --
-añadirMiembro(persona, departamento)
-eliminarMiembro(persona, departamento)
-cambiarDepartamento(persona,departamento)</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>636</x>
-      <y>660</y>
-      <w>126</w>
-      <h>60</h>
-    </coordinates>
-    <panel_attributes>Titular
---
-+ area_investigacion: str</panel_attributes>
++ mostrarDatos():str
++ asignarDepartamento(departamento:Departamento)
++ quitarDepartamento()
++ cambiarDepartamento(departamento:Departamento)</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>420</x>
-      <y>594</y>
-      <w>72</w>
-      <h>84</h>
+      <x>288</x>
+      <y>480</y>
+      <w>96</w>
+      <h>112</h>
     </coordinates>
-    <panel_attributes>lt=&lt;-</panel_attributes>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>100.0;120.0;100.0;60.0;10.0;60.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>474</x>
-      <y>606</y>
-      <w>168</w>
-      <h>72</h>
+      <x>360</x>
+      <y>512</y>
+      <w>224</w>
+      <h>80</h>
     </coordinates>
-    <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;100.0;10.0;40.0;260.0;40.0;260.0;10.0</additional_attributes>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;20.0;260.0;20.0;260.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>342</x>
-      <y>378</y>
-      <w>36</w>
-      <h>300</h>
+      <x>184</x>
+      <y>192</y>
+      <w>48</w>
+      <h>400</h>
     </coordinates>
-    <panel_attributes>lt=&lt;-</panel_attributes>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>40.0;10.0;10.0;10.0;10.0;480.0</additional_attributes>
   </element>
   <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>624</x>
+      <y>608</y>
+      <w>80</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enum&gt;&gt;
+TipoProfesor
+--
+TITULAR
+ASOCIADO</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
     <id>Relation</id>
     <coordinates>
-      <x>696</x>
-      <y>606</y>
-      <w>18</w>
-      <h>66</h>
+      <x>656</x>
+      <y>512</y>
+      <w>48</w>
+      <h>112</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1= 1
+m2= 0..n</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>656</x>
+      <y>280</y>
+      <w>48</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1= 0..n
+m2= 1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
   </element>
 </diagram>
